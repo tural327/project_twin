@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Failed</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #636e72, #2d3436);
+      color: #ff7675;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+    }
+    .error-box {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-box">
+    <h1>Yanlış giriş</h1>
+    <p>User <strong>{{ username }}</strong> istifadəci barədə məlumat tapılmadı</p>
+    <a href="/" style="color: #74b9ff; text-decoration: underline;">Login page geri dö<nav></nav></a>
+  </div>
+</body>
+</html>
