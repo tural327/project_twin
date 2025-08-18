@@ -5,6 +5,35 @@ import plotly.io as pio
 from datetime import datetime
 from datetime import date,datetime
 from collections import Counter
+import plotly.figure_factory as ff
+
+
+def audt_more(df):
+  df2 = df[df['status']=="Open"]
+  list_of_audit = df2['audit'].unique()
+  df_my = df[df['audit'].isin(list_of_audit)]
+  results = []
+
+  for audit_id, group in df_my.groupby('audit'):
+      open_capa = group[group['status'] == 'Open']
+      closed_capa = group[group['status'] == 'Closed']
+
+      result = {
+          'Audit ID': audit_id,
+          'Audit ID number': audit_id.split("-")[0],
+          'Audit ID descr': ",".join(audit_id.split("-")[1:]),
+          'Open Count': len(open_capa),
+          'Closed Count': len(closed_capa),
+          'Open CAPAs': ",".join(list(open_capa['ca_pa'])),
+          'Closed CAPAs': ",".join(list(closed_capa['ca_pa'])),
+      }
+      results.append(result)
+
+  # Convert results to DataFrame
+  summary_df = pd.DataFrame(results)
+
+  return summary_df
+
 
 #######################
 
@@ -29,50 +58,120 @@ def capa_individual_progress(df):
       day = df['root_cause_target_date'].iloc[index] - datetime.today()
       if day.days < 0:
         overdue.append("Root Cause")
+        overdue.append("Corrective Action Plan")
+        overdue.append("Preventive Action")
+        overdue.append("Acceptance of CAP")
+        overdue.append("Implementing of CAP")
+        overdue.append("Follow Up")
       elif day.days >= 0 and day.days <= 3:
         les_3.append("Root Cause")
+        les_3.append("Corrective Action Plan")
+        les_3.append("Preventive Action")
+        les_3.append("Acceptance of CAP")
+        les_3.append("Implementing of CAP")
+        les_3.append("Follow Up")
       elif day.days > 3 and day.days <= 7:
         les_7.append("Root Cause")
+        les_7.append("Corrective Action Plan")
+        les_7.append("Preventive Action")
+        les_7.append("Acceptance of CAP")
+        les_7.append("Implementing of CAP")
+        les_7.append("Follow Up")
       elif day.days > 7 and day.days <= 14:
         les_14.append("Root Cause")
+        les_14.append("Corrective Action Plan")
+        les_14.append("Preventive Action")
+        les_14.append("Acceptance of CAP")
+        les_14.append("Implementing of CAP")
+        les_14.append("Follow Up")
       else:
         plus_14.append("Root Cause")
+        plus_14.append("Corrective Action Plan")
+        plus_14.append("Preventive Action")
+        plus_14.append("Acceptance of CAP")
+        plus_14.append("Implementing of CAP")
+        plus_14.append("Follow Up")
     if each_level == 1:
       day = df['corrective_action_target_date'].iloc[index] - datetime.today()
       if day.days < 0:
         overdue.append("Corrective Action Plan")
+        overdue.append("Preventive Action")
+        overdue.append("Acceptance of CAP")
+        overdue.append("Implementing of CAP")
+        overdue.append("Follow Up")
       elif day.days >= 0 and day.days <= 3:
         les_3.append("Corrective Action Plan")
+        les_3.append("Preventive Action")
+        les_3.append("Acceptance of CAP")
+        les_3.append("Implementing of CAP")
+        les_3.append("Follow Up")
       elif day.days > 3 and day.days <= 7:
         les_7.append("Corrective Action Plan")
+        les_7.append("Preventive Action")
+        les_7.append("Acceptance of CAP")
+        les_7.append("Implementing of CAP")
+        les_7.append("Follow Up")
       elif day.days > 7 and day.days <= 14:
         les_14.append("Corrective Action Plan")
+        les_14.append("Preventive Action")
+        les_14.append("Acceptance of CAP")
+        les_14.append("Implementing of CAP")
+        les_14.append("Follow Up")
       else:
         plus_14.append("Corrective Action Plan")
+        plus_14.append("Preventive Action")
+        plus_14.append("Acceptance of CAP")
+        plus_14.append("Implementing of CAP")
+        plus_14.append("Follow Up")
     if each_level == 2:
       day = df['preventive_action_target_date'].iloc[index] - datetime.today()
       if day.days < 0:
         overdue.append("Preventive Action")
+        overdue.append("Acceptance of CAP")
+        overdue.append("Implementing of CAP")
+        overdue.append("Follow Up")
       elif day.days >= 0 and day.days <= 3:
         les_3.append("Preventive Action")
+        les_3.append("Acceptance of CAP")
+        les_3.append("Implementing of CAP")
+        les_3.append("Follow Up")
       elif day.days > 3 and day.days <= 7:
         les_7.append("Preventive Action")
+        les_7.append("Acceptance of CAP")
+        les_7.append("Implementing of CAP")
+        les_7.append("Follow Up")
       elif day.days > 7 and day.days <= 14:
         les_14.append("Preventive Action")
+        les_14.append("Acceptance of CAP")
+        les_14.append("Implementing of CAP")
+        les_14.append("Follow Up")
       else:
         plus_14.append("Preventive Action")
+        plus_14.append("Acceptance of CAP")
+        plus_14.append("Implementing of CAP")
+        plus_14.append("Follow Up")
     if each_level == 3:
       day = df['accesptance_action_target_date'].iloc[index] - datetime.today()
       if day.days < 0:
         overdue.append("Acceptance of CAP")
+        overdue.append("Implementing of CAP")
+        overdue.append("Follow Up")
       elif day.days >= 0 and day.days <= 3:
         les_3.append("Acceptance of CAP")
+        les_3.append("Implementing of CAP")
+        les_3.append("Follow Up")
       elif day.days > 3 and day.days <= 7:
         les_7.append("Acceptance of CAP")
+        les_7.append("Implementing of CAP")
+        les_7.append("Follow Up")
       elif day.days > 7 and day.days <= 14:
         les_14.append("Acceptance of CAP")
+        les_14.append("Implementing of CAP")
+        les_14.append("Follow Up")
       else:
         plus_14.append("Acceptance of CAP")
+        plus_14.append("Implementing of CAP")
+        plus_14.append("Follow Up")
     if each_level == 4:
       try:
         day = df['implementing_action_target_date'].iloc[index] - datetime.today()
@@ -80,14 +179,19 @@ def capa_individual_progress(df):
         day = df['target_date'].iloc[index] - datetime.today()
       if day.days < 0:
         overdue.append("Implementing of CAP")
+        overdue.append("Follow Up")
       elif day.days >= 0 and day.days <= 3:
         les_3.append("Implementing of CAP")
+        les_3.append("Follow Up")
       elif day.days > 3 and day.days <= 7:
         les_7.append("Implementing of CAP")
+        les_7.append("Follow Up")
       elif day.days > 7 and day.days <= 14:
         les_14.append("Implementing of CAP")
+        les_14.append("Follow Up")
       else:
         plus_14.append("Implementing of CAP")
+        plus_14.append("Follow Up")
     if each_level == 5 or each_level == 6:
       try:
         day =  df['follow_up_target_date'].iloc[index] - datetime.today()
@@ -196,6 +300,12 @@ def required_informations(df):
 
 
 
+
+
+
+
+
+
 app = Flask(__name__)
 
 @app.route("/", methods=["POST", "GET"])
@@ -205,6 +315,15 @@ def index():
     df['raise_date'] = pd.to_datetime(df['raise_date'])
     df_status = df.copy()
     df_always_open = df[df['status']=="Open"]
+
+    stage_mapping = {
+        'root_cause_details': 1,
+        'corrective_action_details': 2,
+        'preventive_action_details': 3,
+        'accesptance_action_details': 4,
+        'implementing_action_details': 5,
+        'follow_up_details': 6
+    }
 
 
     # Prepare date options (optional: use unique dates or convert to strings)
@@ -262,6 +381,42 @@ def index():
     except:
        total_pending=int(0)
 
+
+# Create an empty list to store levels
+    levels = []
+
+    # Reset bar data
+    bars = {col: [] for col in stage_mapping}
+    skipped_combined = []
+
+    # Row-by-row processing
+    for _, row in df_status.iterrows():
+        max_level = 0
+        filled = []
+
+        # Detect filled stages and max level
+        for col in stage_mapping:
+            if pd.notna(row[col]) and str(row[col]).strip() != "":
+                filled.append(col)
+                max_level = max(max_level, stage_mapping[col])
+
+        levels.append(max_level)  # Store the level
+
+        # Fill bars
+        for col in stage_mapping:
+            bars[col].append(1 if col in filled else 0)
+
+        # Detect skipped stages (including follow_up_details)
+        skipped = 0
+        for col in stage_mapping:
+            if col not in filled and stage_mapping[col] < max_level:
+                skipped = 1
+                break
+        skipped_combined.append(skipped)
+
+    # Add the "level" column to your DataFrame
+    df_status["level"] = levels
+
     df_open = df.copy()
     df_open = df_open.sort_values(by="ca_pa")
     x_labels = df_open['ca_pa']
@@ -303,48 +458,15 @@ def index():
         skipped_combined.append(skipped)
 ######################################################  Results ###################################################3
 
-# Create an empty list to store levels
-    levels = []
-
-    # Reset bar data
-    bars = {col: [] for col in stage_mapping}
-    skipped_combined = []
-
-    # Row-by-row processing
-    for _, row in df_open.iterrows():
-        max_level = 0
-        filled = []
-
-        # Detect filled stages and max level
-        for col in stage_mapping:
-            if pd.notna(row[col]) and str(row[col]).strip() != "":
-                filled.append(col)
-                max_level = max(max_level, stage_mapping[col])
-
-        levels.append(max_level)  # Store the level
-
-        # Fill bars
-        for col in stage_mapping:
-            bars[col].append(1 if col in filled else 0)
-
-        # Detect skipped stages (including follow_up_details)
-        skipped = 0
-        for col in stage_mapping:
-            if col not in filled and stage_mapping[col] < max_level:
-                skipped = 1
-                break
-        skipped_combined.append(skipped)
-
-    # Add the "level" column to your DataFrame
-    df_open["level"] = levels
 
 
 
 
-    total = int(df_open[df_open['status']=='Open'].shape[0])
 
-    new, ahy_capa, scaa_capa, overdue, due_3, due_3_7, due_7_more,capa_ovedue,capa_less_3_days,capa_3_7_days,capa_more_7_days= required_informations(df_open)
-    overdue_n,les_3,les_7,les_14,plus_14 = capa_individual_progress(df_open)
+    total = int(df_status[df_status['status']=='Open'].shape[0])
+
+    new, ahy_capa, scaa_capa, overdue, due_3, due_3_7, due_7_more,capa_ovedue,capa_less_3_days,capa_3_7_days,capa_more_7_days= required_informations(df_status)
+    overdue_n,les_3,les_7,les_14,plus_14 = capa_individual_progress(df_status)
     df_summary = build_progress_dataframe(overdue_n,les_3,les_7,les_14,plus_14)
     data = df_summary.values.tolist()
     columns = df_summary.columns.tolist()
@@ -385,6 +507,7 @@ def index():
         legend_title="Stage Name",
         title_font=dict(size=24, family='Arial Black', color='darkblue'),
         xaxis=dict(tickangle=-90),
+        yaxis=dict(range=[0, 6]),
         margin=dict(l=50, r=50, t=80, b=150),
         plot_bgcolor='rgba(255,255,255,0.95)',
         paper_bgcolor='rgba(240,240,240,0.95)',
@@ -393,6 +516,17 @@ def index():
     )
 
     chart_html = pio.to_html(fig, full_html=False)
+
+
+    my_df = audt_more(df_status)
+    df_tt = my_df.drop(columns=['Audit ID','Open Count','Closed Count'])
+
+
+
+    columns1 = df_tt.columns.tolist()
+    data1 = df_tt.values.tolist()
+
+
 
     return render_template("index.html",
                            plot=chart_html,
@@ -409,7 +543,7 @@ def index():
                            due_3=due_3,
                            due_3_7=due_3_7,
                            due_7_more=due_7_more,
-                           data=data, columns=columns,
+                           data=data, columns=columns,data1=data1,columns1=columns1,
                            total_full=total_full,
                            total_open=total_open,
                            total_closed=total_closed,
@@ -423,8 +557,8 @@ def index():
                            selected_sources=selected_sources,
                            audit_options=audit_options,
                            selected_ca_pa=selected_ca_pa,
-                           ca_pa_options=ca_pa_options) 
+                           ca_pa_options=ca_pa_options,
+) 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
