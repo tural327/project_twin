@@ -368,10 +368,13 @@ def index():
             df_status = df_status[df_status['raise_date'].isin(selected_data_types)]
         if selected_audits:
             df = df[df['audit'].isin(selected_audits)]
+            df_status = df_status[df_status['audit'].isin(selected_audits)]
         if selected_sources:
             df = df[df['source'].isin(selected_sources)]
+            df_status = df_status[df_status['source'].isin(selected_sources)]
         if selected_ca_pa:
             df = df[df['ca_pa'].isin(selected_ca_pa)]
+            df_status = df_status[df_status['ca_pa'].isin(selected_ca_pa)]
 
     total_full = int(df_status.shape[0])
     total_open = int(df_status[df_status['status']=='Open'].shape[0])
@@ -562,3 +565,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
