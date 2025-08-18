@@ -231,6 +231,49 @@
     </table>
   </div>
 
+<br>
+
+<div>
+    {{ plot_pie | safe }}
+</div>
+
+
+<br>
+
+<div>
+    {{ plot_scater | safe }}
+</div>
+
+
+<div>
+    {{ plot_audit | safe }}
+</div>
+
+<br>
+  <!-- CA/PA Table View -->
+  <div class="section-header">Audit STATUS</div>
+  <div class="table-wrapper">
+    <table class="info-table text-center">
+      <thead>
+        <tr>
+          {% for col in columns1 %}
+            <th>{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data1 %}
+          <tr>
+            {% for cell in row %}
+              <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
 <script>
   $(document).ready(function() {
     $('#status-select').select2({
