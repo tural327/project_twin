@@ -220,6 +220,7 @@
         </tr>
       </thead>
       <tbody>
+
         {% for row in data %}
           <tr>
             {% for cell in row %}
@@ -272,6 +273,13 @@
       </tbody>
     </table>
   </div>
+
+
+<br>  
+<div>
+    {{ plot_audit_count | safe }}
+</div>
+
 
 
 <script>
