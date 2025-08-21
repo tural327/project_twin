@@ -261,9 +261,9 @@ def required_informations(df):
   ahy_capa = []
   scaa_capa = []
   for index, each_level in enumerate(df["level"]):
-    if each_level <= 3:
+    if each_level < 3:
       ahy_capa.append(each_level)
-    elif each_level > 3 and df['status'].iloc[index]=="Open":
+    elif each_level > 2 and df['status'].iloc[index]=="Open":
       scaa_capa.append(each_level)
   # CAPA status deadline 
   capa_ovedue = []
@@ -581,3 +581,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
