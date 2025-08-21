@@ -6,7 +6,9 @@ from datetime import datetime
 from datetime import date,datetime
 from collections import Counter
 import plotly.figure_factory as ff
-
+import plotly.express as px
+from plotly.subplots import make_subplots
+import numpy as np
 
 def audt_more(df):
   df2 = df[df['status']=="Open"]
@@ -529,6 +531,19 @@ def index():
     columns1 = df_tt.columns.tolist()
     data1 = df_tt.values.tolist()
 
+    df_melted = my_df.melt(id_vars="Audit ID number", 
+                    value_vars=["Open Count", "Closed Count"],
+                    var_name="Status", value_name="Count")
+    
+    fig_audit = px.bar(df_melted, 
+             x="Audit ID number", 
+             y="Count", 
+             color="Status", 
+             barmode="group",
+             title="Audit open closed status",
+             color_discrete_map={"Open Count": "red", "Closed Count": "green"})
+    chart__audit = pio.to_html(fig_audit, full_html=False)
+
 
 
     return render_template("index.html",
@@ -561,8 +576,8 @@ def index():
                            audit_options=audit_options,
                            selected_ca_pa=selected_ca_pa,
                            ca_pa_options=ca_pa_options,
+                           plot_audit_count = chart__audit
 ) 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
