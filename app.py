@@ -10,6 +10,45 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import numpy as np
 
+
+
+def how_many_days(df2):
+  ca_pa_closed = []
+  closed_days = []
+  my_ca_pa = []
+  for inx,row in enumerate(df2['level']):
+    try:
+      if row == 0 or row == 1:
+        days = datetime.strptime(df2['root_cause_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
+        ca_pa_closed.append(df2['ca_pa'].iloc[inx])
+        closed_days.append(days.days)
+      elif row == 2:
+        days = datetime.strptime(df2['corrective_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
+        ca_pa_closed.append(df2['ca_pa'].iloc[inx])
+        closed_days.append(days.days)
+      elif row == 3:
+        days = datetime.strptime(df2['preventive_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
+        ca_pa_closed.append(df2['ca_pa'].iloc[inx])
+        closed_days.append(days.days)
+      elif row == 4:
+        days = datetime.strptime(df2['implementing_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
+        ca_pa_closed.append(df2['ca_pa'].iloc[inx])
+        closed_days.append(days.days)
+      elif row == 5:
+        days = datetime.strptime(df2['accesptance_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
+        ca_pa_closed.append(df2['ca_pa'].iloc[inx])
+        closed_days.append(days.days)
+      elif row == 6:
+        days = datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
+        ca_pa_closed.append(df2['ca_pa'].iloc[inx])
+        closed_days.append(days.days)
+        if (datetime.today() - datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
+           my_ca_pa.append(df2['ca_pa'].iloc[inx])
+
+    except:
+      None
+  return ca_pa_closed,closed_days,my_ca_pa
+
 def audt_more(df):
   df2 = df[df['status']=="Open"]
   list_of_audit = df2['audit'].unique()
@@ -469,7 +508,7 @@ def index():
 
 
     total = int(df_status[df_status['status']=='Open'].shape[0])
-
+    ca_pa_closed,closed_days,ca_pa_list = how_many_days(df_status)
     new, ahy_capa, scaa_capa, overdue, due_3, due_3_7, due_7_more,capa_ovedue,capa_less_3_days,capa_3_7_days,capa_more_7_days= required_informations(df_status)
     overdue_n,les_3,les_7,les_14,plus_14 = capa_individual_progress(df_status)
     df_summary = build_progress_dataframe(overdue_n,les_3,les_7,les_14,plus_14)
@@ -542,8 +581,75 @@ def index():
              barmode="group",
              title="Audit open closed status",
              color_discrete_map={"Open Count": "red", "Closed Count": "green"})
+    
     chart__audit = pio.to_html(fig_audit, full_html=False)
 
+
+    
+
+
+
+
+    totals = {
+        "Status": ["Closed","Open"],
+        "Count": [df[df['status']=="Closed"].shape[0], df[df['status']=="Open"].shape[0]]
+    }
+    df_totals = pd.DataFrame(totals)
+
+    pie = go.Pie(
+        labels=df_totals["Status"],
+        values=df_totals["Count"],
+        marker=dict(colors=["red", "green"]),
+        textinfo="label+percent+value"
+    )
+
+    scatter = go.Scatter(
+        x=ca_pa_closed,
+        y=closed_days,
+        mode="markers+text",
+        textposition="top center",
+        marker=dict(size=4, color="red"),
+        name="Closed Time"
+    )
+
+
+
+
+    avg_value = np.mean(closed_days)
+
+
+
+    avg_line = go.Scatter(
+        x=ca_pa_closed,
+        y=[avg_value] * len(ca_pa_closed),
+        mode="lines",
+        line=dict(color="blue", dash="dash"),
+        name=f"Avg = {avg_value:.2f}"
+    )
+
+
+
+    fig_last_full = make_subplots(rows=1, cols=2, subplot_titles=(" ", "Audit Counts with Avg Line"),
+                        specs=[[{"type": "domain"}, {"type": "xy"}]],column_widths=[0.25, 0.75])
+
+
+
+    fig_last_full.add_trace(pie, row=1, col=1)
+
+    fig_last_full.add_trace(scatter, row=1, col=2)
+    fig_last_full.add_trace(avg_line, row=1, col=2)
+
+
+    fig_last_full.update_layout(
+        xaxis2=dict(
+            rangeslider=dict(visible=True),
+            tickmode="linear",
+            dtick=1
+        )
+    )
+
+
+    chart_the_last_full = pio.to_html(fig_last_full, full_html=False)
 
 
     return render_template("index.html",
@@ -576,7 +682,10 @@ def index():
                            audit_options=audit_options,
                            selected_ca_pa=selected_ca_pa,
                            ca_pa_options=ca_pa_options,
-                           plot_audit_count = chart__audit
+                           plot_audit_count = chart__audit,
+                           chart_the_last_full=chart_the_last_full,
+                           ca_pa_list_name = ",".join(ca_pa_list),
+                           count_capa = len(ca_pa_list)
 ) 
 
 if __name__ == '__main__':
