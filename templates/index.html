@@ -190,6 +190,7 @@
         <tr><td>Due in 3 Days</td><td><strong>{{ due_3 }}</strong></td><td><strong>{{ capa_less_3_days }}</strong></td></tr>
         <tr><td>Due 3–7 Days</td><td><strong>{{ due_3_7 }}</strong></td><td><strong>{{ capa_3_7_days }}</strong></td></tr>
         <tr><td>Due > 7 Days</td><td><strong>{{ due_7_more }}</strong></td><td><strong>{{ capa_more_7_days }}</strong></td></tr>
+        <tr><td>Closed CA/PA last 7 days</td><td><strong>{{ count_capa }}</strong></td><td><strong>{{ ca_pa_list_name }}</strong></td></tr>
   
       </table>
 
@@ -281,6 +282,10 @@
 </div>
 
 
+<br>  
+<div>
+    {{ chart_the_last_full | safe }}
+</div>
 
 <script>
   $(document).ready(function() {
