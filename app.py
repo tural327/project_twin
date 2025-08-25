@@ -578,7 +578,7 @@ def index():
              x="Audit ID number", 
              y="Count", 
              color="Status", 
-             barmode="group",
+             barmode="stack",
              title="Audit open closed status",
              color_discrete_map={"Open Count": "red", "Closed Count": "green"})
     
@@ -690,3 +690,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
