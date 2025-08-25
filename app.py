@@ -22,26 +22,38 @@ def how_many_days(df2):
         days = datetime.strptime(df2['root_cause_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
+        if (datetime.today() - datetime.strptime(df2['root_cause_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
+           my_ca_pa.append(df2['ca_pa'].iloc[inx])
       elif row == 2:
         days = datetime.strptime(df2['corrective_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
+        if (datetime.today() - datetime.strptime(df2['corrective_action_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
+           my_ca_pa.append(df2['ca_pa'].iloc[inx])
       elif row == 3:
         days = datetime.strptime(df2['preventive_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
+        if (datetime.today() - datetime.strptime(df2['preventive_action_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
+           my_ca_pa.append(df2['ca_pa'].iloc[inx])
       elif row == 4:
         days = datetime.strptime(df2['implementing_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
+        if (datetime.today() - datetime.strptime(df2['implementing_action_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
+           my_ca_pa.append(df2['ca_pa'].iloc[inx])
       elif row == 5:
         days = datetime.strptime(df2['accesptance_action_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
-      elif row == 6:
+        if (datetime.today() - datetime.strptime(df2['accesptance_action_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
+           my_ca_pa.append(df2['ca_pa'].iloc[inx])
+      elif row > 5:
         days = datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
+        if df2['ca_pa'].iloc[inx]=="CA/PA-1067":
+           print((datetime.today() - datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")).days)
         if (datetime.today() - datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
            my_ca_pa.append(df2['ca_pa'].iloc[inx])
 
@@ -355,7 +367,7 @@ def index():
     df['raise_date1'] = df['raise_date']
     df['raise_date'] = pd.to_datetime(df['raise_date'])
     df_status = df.copy()
-    df_always_open = df[df['status']=="Open"]
+    df_always_open = df[df['status'].isin(["Open", "Pending"])]
 
     stage_mapping = {
         'root_cause_details': 1,
@@ -460,6 +472,8 @@ def index():
 
     # Add the "level" column to your DataFrame
     df_status["level"] = levels
+
+
 
     df_open = df.copy()
     df_open = df_open.sort_values(by="ca_pa")
@@ -690,4 +704,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
