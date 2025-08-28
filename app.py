@@ -13,7 +13,7 @@ import numpy as np
 
 
 def how_many_days(df2):
-  df2 = df2[df2['status'] == 'Closed']
+  df2[df2['status'] == 'Closed']
   ca_pa_closed = []
   closed_days = []
   my_ca_pa = []
@@ -604,8 +604,8 @@ def index():
 
 
     totals = {
-        "Status": ["Closed","Open"],
-        "Count": [df_status[df_status['status']=="Closed"].shape[0], df_status[df_status['status']=="Open"].shape[0]]
+        "Status": ["Closed","Open + Pending"],
+        "Count": [df_status[df_status['status']=="Closed"].shape[0], df_status[df_status['status'].isin(["Open", "Pending"])].shape[0]]
     }
     df_totals = pd.DataFrame(totals)
 
