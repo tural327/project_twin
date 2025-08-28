@@ -619,7 +619,7 @@ def index():
     scatter = go.Scatter(
         x=ca_pa_closed,
         y=closed_days,
-        mode="markers+text",
+        mode="lines+markers+text",
         textposition="top center",
         marker=dict(size=4, color="red"),
         name="Closed Time"
@@ -703,3 +703,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
