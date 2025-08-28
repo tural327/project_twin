@@ -13,6 +13,7 @@ import numpy as np
 
 
 def how_many_days(df2):
+  df2 = df2[df2['status'] == 'Closed']
   ca_pa_closed = []
   closed_days = []
   my_ca_pa = []
@@ -52,8 +53,6 @@ def how_many_days(df2):
         days = datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")-df2['raise_date'].iloc[inx]
         ca_pa_closed.append(df2['ca_pa'].iloc[inx])
         closed_days.append(days.days)
-        if df2['ca_pa'].iloc[inx]=="CA/PA-1067":
-           print((datetime.today() - datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")).days)
         if (datetime.today() - datetime.strptime(df2['follow_up_closed_date'].iloc[inx], "%m/%d/%Y")).days<8:
            my_ca_pa.append(df2['ca_pa'].iloc[inx])
 
@@ -606,7 +605,7 @@ def index():
 
     totals = {
         "Status": ["Closed","Open"],
-        "Count": [df[df['status']=="Closed"].shape[0], df[df['status']=="Open"].shape[0]]
+        "Count": [df_status[df_status['status']=="Closed"].shape[0], df_status[df_status['status']=="Open"].shape[0]]
     }
     df_totals = pd.DataFrame(totals)
 
